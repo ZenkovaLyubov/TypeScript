@@ -1,18 +1,17 @@
+import { namesFields } from './search-form';
 import { renderBlock } from './lib.js';
+import { ISearchFormData } from './ISearchFormData.js';
+import { funcSearch, namesFields } from './search-helpers.js';
 
-
-export function renderSearchFormBlock(
-  checkInDate?: Date,
-  checkOutDate?: Date
-) {
+export function renderSearchFormBlock(checkInDate?: Date, checkOutDate?: Date) {
   const todayDate = new Date().toISOString().slice(0, 10);
   const minYear = new Date().toISOString().slice(0, 4);
   const minMonth = new Date().toISOString().slice(5, 7);
 
-  //дата въезда. Если нет, то по умолчанию + 1 день от текущего дня 
+  //дата въезда. Если нет, то по умолчанию + 1 день от текущего дня
   const checkInDateDefault = new Date(new Date());
   checkInDateDefault.setDate(new Date().getDate() + 1);
-  const checkInDateDefault1 = checkInDateDefault.toISOString().slice(0, 10); 
+  const checkInDateDefault1 = checkInDateDefault.toISOString().slice(0, 10);
   const checkInDateStr =
     checkInDate?.toISOString().slice(0, 10) || checkInDateDefault1;
 
@@ -22,7 +21,7 @@ export function renderSearchFormBlock(
   const checkOutDateDefault1 = checkOutDateDefault.toISOString().slice(0, 10);
   const checkOutDateStr =
     checkOutDate?.toISOString().slice(0, 10) || checkOutDateDefault1;
-  
+
   // максимальная дата в календаре, которую можно указать.
   // Это последний день следующего месяца
   const maxDateFull = new Date(Number(minYear), Number(minMonth) + 1, 0);
@@ -30,11 +29,25 @@ export function renderSearchFormBlock(
   const maxMounth = maxDateFull.getMonth() + 1;
   const maxYear = maxDateFull.getFullYear();
   const maxDate = `${maxYear}-${maxMounth}-${maxDay}`;
- 
+
+  function handleFormSubmit(e: SubmitEvent, namesFieldsForm: namesFields[]) {
+    e.preventDefault();
+    if (e.target) {
+      const dataForm = new FormData(e.target as HTMLFormElement);
+      const dataRows: ISearchFormData = {};
+
+      namesFieldsForm.forEach((el) => {
+        dataRows[el] = dataForm.get(el);
+      });
+
+      funcSearch(dataRows);
+    }
+  }
+
   renderBlock(
     'search-form-block',
     `
-    <form>
+    <form id="form">
       <fieldset class="search-filedset">
         <div class="row">
           <div>
@@ -61,11 +74,17 @@ export function renderSearchFormBlock(
             <input id="max-price" type="text" value="" name="price" class="max-price" />
           </div>
           <div>
-            <div><button>Найти</button></div>
+            <div><button type="submit">Найти</button></div>
           </div>
         </div>
       </fieldset>
     </form>
     `
+  );
+  const searchForm = document.getElementById('form');
+
+  const namesFieldsForm: namesFields[] = ['checkin', 'checkout', 'price'];
+  searchForm?.addEventListener('submit', (e) =>
+    handleFormSubmit(e, namesFieldsForm)
   );
 }
