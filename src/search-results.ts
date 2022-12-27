@@ -1,6 +1,8 @@
 import { renderBlock } from './lib.js'
+import { PlaceList } from './IPlace.js';
+import { IPlace } from './IPlace';
 
-export function renderSearchStubBlock () {
+export function renderSearchStubBlock() {
   renderBlock(
     'search-results-block',
     `
@@ -9,10 +11,10 @@ export function renderSearchStubBlock () {
       <p>Чтобы начать поиск, заполните форму и&nbsp;нажмите "Найти"</p>
     </div>
     `
-  )
+  );
 }
 
-export function renderEmptyOrErrorSearchBlock (reasonMessage) {
+export function renderEmptyOrErrorSearchBlock(reasonMessage) {
   renderBlock(
     'search-results-block',
     `
@@ -21,10 +23,10 @@ export function renderEmptyOrErrorSearchBlock (reasonMessage) {
       <p>${reasonMessage}</p>
     </div>
     `
-  )
+  );
 }
 
-export function renderSearchResultsBlock () {
+export function renderSearchResultsBlock(place: IPlace) {
   renderBlock(
     'search-results-block',
     `
@@ -39,50 +41,68 @@ export function renderSearchResultsBlock () {
             </select>
         </div>
     </div>
-    <ul class="results-list">
-      <li class="result">
-        <div class="result-container">
-          <div class="result-img-container">
-            <div class="favorites active"></div>
-            <img class="result-img" src="./img/result-1.png" alt="">
-          </div>	
-          <div class="result-info">
-            <div class="result-info--header">
-              <p>YARD Residence Apart-hotel</p>
-              <p class="price">13000&#8381;</p>
-            </div>
-            <div class="result-info--map"><i class="map-icon"></i> 2.5км от вас</div>
-            <div class="result-info--descr">Комфортный апарт-отель в самом сердце Санкт-Петербрга. К услугам гостей номера с видом на город и бесплатный Wi-Fi.</div>
-            <div class="result-info--footer">
-              <div>
-                <button>Забронировать</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </li>
-      <li class="result">
-        <div class="result-container">
-          <div class="result-img-container">
-            <div class="favorites"></div>
-            <img class="result-img" src="./img/result-2.png" alt="">
-          </div>	
-          <div class="result-info">
-            <div class="result-info--header">
-              <p>Akyan St.Petersburg</p>
-              <p class="price">13000&#8381;</p>
-            </div>
-            <div class="result-info--map"><i class="map-icon"></i> 1.1км от вас</div>
-            <div class="result-info--descr">Отель Akyan St-Petersburg с бесплатным Wi-Fi на всей территории расположен в историческом здании Санкт-Петербурга.</div>
-            <div class="result-info--footer">
-              <div>
-                <button>Забронировать</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </li>
-    </ul>
+    <ul class="results-list" id="placeBox">` +
+      renderPlace(place) +
+      `</ul>
     `
-  )
+  );
+  toggleFavoriteItem(place);
+}
+
+function renderPlace(place: IPlace): string {
+  let str = '';
+
+  for (const key in place) {
+    str =
+      str +
+      `
+      <li class="result">
+        <div class="result-container">
+          <div class="result-img-container">
+           <div id="${place[key]['id']}" class="favorites active"></div>
+            <img class="result-img" src="${place[key]['image']}" alt="">
+          </div>	
+          <div class="result-info">
+            <div class="result-info--header">
+              <p>${place[key]['name']}</p>
+              <p class="price">${place[key]['price']}&#8381;</p>
+            </div>
+            <div class="result-info--map"><i class="map-icon"></i>${place[key]['remoteness']}км от вас</div>
+            <div class="result-info--descr">${place[key]['description']}</div>
+            <div class="result-info--footer">
+              <div>
+                <button>Забронировать</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>     
+    `;
+  }
+
+  return str;
+}
+function toggleFavoriteItem(place: IPlace) {
+  let idel = 0;
+
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('favorites')) {
+      idel = Number(e.target.getAttribute('id'));
+      if (e.target.classList.contains('active')) {
+        e.target.classList.remove('active');
+      } else {
+        e.target.classList.add('active');
+
+        const elemF: IPlace = place.find((x) => x.id === idel);
+
+        const elemFavorites: PlaceList = {
+          id: elemF.id,
+          name: elemF.name,
+          image: elemF.image,
+        };
+
+        localStorage.setItem('favoriteItems', JSON.stringify(elemFavorites));
+      }
+    }
+  });
 }

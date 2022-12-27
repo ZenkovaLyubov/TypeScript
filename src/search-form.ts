@@ -1,4 +1,4 @@
-import { namesFields } from './search-form';
+// import { namesFields } from './search-form';
 import { renderBlock } from './lib.js';
 import { ISearchFormData } from './ISearchFormData.js';
 import { funcSearch, namesFields } from './search-helpers.js';
