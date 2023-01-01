@@ -7,24 +7,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { renderSearchResultsBlock } from './search-results.js';
+import { renderSearchResultsBlock } from "./search-results.js";
 export function funcSearch(formData) {
     console.log(formData);
     searchApi(formData);
 }
-const host = 'http://localhost:3030';
+const host = "http://localhost:3030";
 function searchApi(formData) {
     return __awaiter(this, void 0, void 0, function* () {
-        const dateIn = new Date(formData['checkin']).getTime();
-        const dateOut = new Date(formData['checkout']).getTime();
-        const url = `${host}/places?checkInDate=${dateIn}&coordinates=59.9386,30.3141&checkOutDate=${dateOut}&maxPrice=${formData['price']}`;
+        const dateIn = new Date(formData["checkin"]).getTime();
+        const dateOut = new Date(formData["checkout"]).getTime();
+        const url = `${host}/places?checkInDate=${dateIn}&coordinates=59.9386,30.3141&checkOutDate=${dateOut}&maxPrice=${formData["price"]}`;
         const response = yield fetch(url);
         if (response.ok) {
+            // const json = await (<IPlace>response.json());
             const json = yield response.json();
-            renderSearchResultsBlock(json);
+            const iplace = [];
+            json.forEach((el) => {
+                iplace.push(el);
+            });
+            renderSearchResultsBlock(iplace);
         }
         else {
-            alert('Ошибка HTTP: ' + response.status);
+            alert("Ошибка HTTP: " + response.status);
         }
     });
 }
