@@ -8,4 +8,4 @@ export interface IPlace {
   price: number;
 }
 
-export type PlaceList = Pick<IPlace, 'id' | 'name' | 'image'>;
+export type PlaceList = Pick<IPlace, "id" | "name" | "image">;

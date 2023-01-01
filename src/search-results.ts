@@ -1,6 +1,6 @@
-import { renderBlock } from './lib.js'
-import { PlaceList } from './IPlace.js';
-import { IPlace } from './IPlace';
+import { renderBlock } from "./lib.js"
+import { PlaceList } from "./IPlace.js";
+import { IPlace } from "./IPlace";
 
 export function renderSearchStubBlock() {
   renderBlock(
@@ -49,44 +49,36 @@ export function renderSearchResultsBlock(place: IPlace[]) {
   toggleFavoriteItem(place);
 }
 
-// export function getLocalStorage(key: string): PlaceList[] {
-//   let favPlaces: PlaceList[] = [];
-//   favPlaces = JSON.parse(localStorage.getItem(key));
-//   return favPlaces;
-// }
+export function getLocalStorage(key: string): PlaceList[] {
+  let favPlaces: PlaceList[] = [];
+  favPlaces = JSON.parse(localStorage.getItem(key));
+  if (favPlaces) {
+    return favPlaces;
+  } else {
+    return [];
+  }
+}
 
-// function checkLocalStorageFavoriteItems(idPlace: number): number | null {
-//   const favPlaces = getLocalStorage("favoriteItems");
+function checkLocalStorageFavoriteItems(idPlace: number): number | null {
+  const favPlaces = getLocalStorage("favoriteItems");
 
-//   if (favPlaces) {
-//     const indexFavPlace = Number(favPlaces.find((x) => x.id === idPlace)?.id);
-//     return indexFavPlace;
-//   }
-//   return null;
-// }
+  if (favPlaces) {
+    const indexFavPlace = Number(favPlaces.find((x) => x.id === idPlace)?.id);
+    return indexFavPlace;
+  }
+  return null;
+}
 
 function renderPlace(place: IPlace[]): string {
   let str = "";
   let classActive = "";
-  const favPlaces = <PlaceList[]>(
-    JSON.parse(localStorage.getItem("favoriteItems"))
-  );
+
   for (const key in place) {
-    if (favPlaces) {
-      const indexFavPlace = Number(
-        favPlaces.find((x) => x.id === place[key]["id"])?.id
-      );
-      if (indexFavPlace) {
-        classActive = "active";
-      } else {
-        classActive = "";
-      }
+    if (checkLocalStorageFavoriteItems(place[key]["id"])) {
+      classActive = "active";
+    } else {
+      classActive = "";
     }
-    // if (checkLocalStorageFavoriteItems(place[key]["id"])) {
-    //   classActive = "active";
-    // } else {
-    //   classActive = "";
-    // }
 
     str =
       str +
@@ -119,63 +111,22 @@ function renderPlace(place: IPlace[]): string {
 
 function toggleFavoriteItem(place: IPlace[]) {
   let idel = 0;
-  //console.log("favPlaces1", favPlaces);
   document.addEventListener("click", (e) => {
     if ((e.target as Element).classList.contains("favorites")) {
       idel = Number((e.target as Element).getAttribute("id"));
       if ((e.target as Element).classList.contains("active")) {
         (e.target as Element).classList.remove("active");
 
-        // favPlaces = <PlaceList[]>(
-        //   JSON.parse(localStorage.getItem("favoriteItems"))
-        // );
-        // if (favPlaces) {
-        //   console.log("favPlaces ", favPlaces);
-        //   // console.log(
-        //   //   "test ",
-        //   //   favPlaces.find((x) => x.id === idel)
-        //   // );
-        //   const indexFavPlace = Number(favPlaces.find((x) => x.id === idel).id);
-
-        //   console.log("indexFavPlace ", indexFavPlace);
-        //   if (indexFavPlace) {
-        //     favPlacesAfterDel = favPlaces.filter((x) => x.id !== idel);
-        //     localStorage.removeItem("favoriteItems");
-        //     localStorage.setItem(
-        //       "favoriteItems",
-        //       JSON.stringify(favPlacesAfterDel)
-        //     );
-        //   }
-        // }
-        // checkLocalStorageFavoriteItems
-        const favPlaces = <PlaceList[]>(
-          JSON.parse(localStorage.getItem("favoriteItems"))
-        );
-        console.log("favPlaces1 ", favPlaces);
-        if (favPlaces) {
-          const indexFavPlace = Number(
-            favPlaces.find((x) => x.id === idel)?.id
+        if (checkLocalStorageFavoriteItems(idel)) {
+          const favPlacesAfterDel = getLocalStorage("favoriteItems").filter(
+            (x) => x.id !== idel
           );
-          if (indexFavPlace) {
-            const favPlacesAfterDel = favPlaces.filter((x) => x.id !== idel);
-            localStorage.removeItem("favoriteItems");
-            localStorage.setItem(
-              "favoriteItems",
-              JSON.stringify(favPlacesAfterDel)
-            );
-          }
+          localStorage.removeItem("favoriteItems");
+          localStorage.setItem(
+            "favoriteItems",
+            JSON.stringify(favPlacesAfterDel)
+          );
         }
-
-        // if (checkLocalStorageFavoriteItems(idel)) {
-        //   const favPlacesAfterDel = getLocalStorage("favoriteItems").filter(
-        //     (x) => x.id !== idel
-        //   );
-        //   localStorage.removeItem("favoriteItems");
-        //   localStorage.setItem(
-        //     "favoriteItems",
-        //     JSON.stringify(favPlacesAfterDel)
-        //   );
-        // }
       } else {
         (e.target as Element).classList.add("active");
 
@@ -186,39 +137,17 @@ function toggleFavoriteItem(place: IPlace[]) {
           name: elemF.name,
           image: elemF.image,
         };
-        // checkLocalStorageFavoriteItems
 
-        const favPlaces = <PlaceList[]>(
-          JSON.parse(localStorage.getItem("favoriteItems"))
-        );
-        console.log("favPlaces ", favPlaces);
-        if (favPlaces) {
-          const indexFavPlace = Number(
-            favPlaces.find((x) => x.id === idel)?.id
-          );
-          if (!indexFavPlace) {
-            console.log("test");
-            favPlaces.push(elemFavorites);
-            localStorage.setItem("favoriteItems", JSON.stringify(favPlaces));
-          }
+        if (!checkLocalStorageFavoriteItems(idel)) {
+          const favPlaces = getLocalStorage("favoriteItems");
+          favPlaces.push(elemFavorites);
+          localStorage.setItem("favoriteItems", JSON.stringify(favPlaces));
         } else {
           localStorage.setItem(
             "favoriteItems",
             JSON.stringify([elemFavorites])
           );
         }
-
-        // if (!checkLocalStorageFavoriteItems(idel)) {
-        //   // console.log("test");
-        //   // let favPlaces = getLocalStorage("favoriteItems");
-        //   // favPlaces.push(elemFavorites);
-        //   localStorage.setItem(
-        //     "favoriteItems",
-        //     JSON.stringify(getLocalStorage("favoriteItems").push(elemFavorites))
-        //   );
-        // } else {
-        //   localStorage.setItem("favoriteItems", JSON.stringify([elemFavorites]));
-        // }
       }
     }
   });

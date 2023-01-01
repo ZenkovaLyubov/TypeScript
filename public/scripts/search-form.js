@@ -1,6 +1,6 @@
 // import { namesFields } from './search-form';
-import { renderBlock } from './lib.js';
-import { funcSearch } from './search-helpers.js';
+import { renderBlock } from "./lib.js";
+import { funcSearch } from "./search-helpers.js";
 export function renderSearchFormBlock(checkInDate, checkOutDate) {
     const todayDate = new Date().toISOString().slice(0, 10);
     const minYear = new Date().toISOString().slice(0, 4);
@@ -33,7 +33,7 @@ export function renderSearchFormBlock(checkInDate, checkOutDate) {
             funcSearch(dataRows);
         }
     }
-    renderBlock('search-form-block', `
+    renderBlock("search-form-block", `
     <form id="form">
       <fieldset class="search-filedset">
         <div class="row">
@@ -67,7 +67,7 @@ export function renderSearchFormBlock(checkInDate, checkOutDate) {
       </fieldset>
     </form>
     `);
-    const searchForm = document.getElementById('form');
-    const namesFieldsForm = ['checkin', 'checkout', 'price'];
-    searchForm === null || searchForm === void 0 ? void 0 : searchForm.addEventListener('submit', (e) => handleFormSubmit(e, namesFieldsForm));
+    const searchForm = document.getElementById("form");
+    const namesFieldsForm = ["checkin", "checkout", "price"];
+    searchForm === null || searchForm === void 0 ? void 0 : searchForm.addEventListener("submit", (e) => handleFormSubmit(e, namesFieldsForm));
 }
