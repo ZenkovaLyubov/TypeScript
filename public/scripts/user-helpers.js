@@ -1,7 +1,7 @@
 import { User } from "./classUser.js";
 export function getUserData() {
     //////занесли тестовые данные в локалСторидж
-    window.localStorage.setItem("user", "{\"userName\": \"Марина В.\", \"avatarUrl\": \"/img/avatar.png\"}");
+    window.localStorage.setItem("user", '{"userName": "Марина В.", "avatarUrl": "/img/avatar.png"}');
     /////////////////
     const user = JSON.parse(window.localStorage.getItem("user"));
     Object.setPrototypeOf(user, User.prototype);
@@ -20,12 +20,4 @@ export function getFavoritesAmount() {
     else {
         return 0;
     }
-    ///////////////////////
-    // const favPlaces = getLocalStorage("favoriteItems");
-    // if (favPlaces) {
-    //   return favPlaces.length;
-    // } else {
-    //   return 0;
-    // }
-    /////////////////////////
 }

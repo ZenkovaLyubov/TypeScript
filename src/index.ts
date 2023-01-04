@@ -11,10 +11,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   renderUserBlock(user.userName, user.avatarUrl, favoritesAmount);
 
-  /////даты добавлены ддля проверки работы функции из дз1
-  // const dateIn = new Date(new Date('2022-11-28'));
-  // const dateOut = new Date(new Date('2022-12-02'));
-  // renderSearchFormBlock(dateIn, dateOut);
   renderSearchFormBlock();
 
   renderSearchStubBlock();

@@ -1,12 +1,11 @@
 import { User } from "./classUser.js";
-import { getLocalStorage } from "./search-results";
 import { PlaceList } from "./IPlace.js";
 
 export function getUserData() {
   //////занесли тестовые данные в локалСторидж
   window.localStorage.setItem(
     "user",
-    "{\"userName\": \"Марина В.\", \"avatarUrl\": \"/img/avatar.png\"}"
+    '{"userName": "Марина В.", "avatarUrl": "/img/avatar.png"}'
   );
   /////////////////
   const user: unknown = JSON.parse(window.localStorage.getItem("user"));
@@ -27,12 +26,4 @@ export function getFavoritesAmount(): number {
   } else {
     return 0;
   }
-  ///////////////////////
-  // const favPlaces = getLocalStorage("favoriteItems");
-  // if (favPlaces) {
-  //   return favPlaces.length;
-  // } else {
-  //   return 0;
-  // }
-  /////////////////////////
 }

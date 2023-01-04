@@ -32,7 +32,42 @@ export function renderSearchResultsBlock(place) {
         renderPlace(place) +
         `</ul>
     `);
-    toggleFavoriteItem(place);
+    for (const key in place) {
+        const element = document.getElementById(place[key]["id"]);
+        if (!element)
+            continue;
+        element.addEventListener("click", (e) => {
+            let idel = "";
+            if (e.target.classList.contains("favorites")) {
+                idel = e.target.getAttribute("id").toString().trim();
+                if (e.target.classList.contains("active")) {
+                    e.target.classList.remove("active");
+                    if (checkLocalStorageFavoriteItems(idel)) {
+                        const favPlacesAfterDel = getLocalStorage("favoriteItems").filter((x) => x.id !== idel);
+                        localStorage.removeItem("favoriteItems");
+                        localStorage.setItem("favoriteItems", JSON.stringify(favPlacesAfterDel));
+                    }
+                }
+                else {
+                    e.target.classList.add("active");
+                    const elemF = place.find((x) => x.id === idel);
+                    const elemFavorites = {
+                        id: elemF.id,
+                        name: elemF.name,
+                        image: elemF.image,
+                    };
+                    if (!checkLocalStorageFavoriteItems(idel)) {
+                        const favPlaces = getLocalStorage("favoriteItems");
+                        favPlaces.push(elemFavorites);
+                        localStorage.setItem("favoriteItems", JSON.stringify(favPlaces));
+                    }
+                    else {
+                        localStorage.setItem("favoriteItems", JSON.stringify([elemFavorites]));
+                    }
+                }
+            }
+        });
+    }
 }
 export function getLocalStorage(key) {
     let favPlaces = [];
@@ -48,7 +83,8 @@ function checkLocalStorageFavoriteItems(idPlace) {
     var _a;
     const favPlaces = getLocalStorage("favoriteItems");
     if (favPlaces) {
-        const indexFavPlace = Number((_a = favPlaces.find((x) => x.id === idPlace)) === null || _a === void 0 ? void 0 : _a.id);
+        const indexFavPlace = (_a = favPlaces
+            .find((x) => x.id === idPlace)) === null || _a === void 0 ? void 0 : _a.id.toString().trim();
         return indexFavPlace;
     }
     return null;
@@ -90,37 +126,4 @@ function renderPlace(place) {
     `;
     }
     return str;
-}
-function toggleFavoriteItem(place) {
-    let idel = 0;
-    document.addEventListener("click", (e) => {
-        if (e.target.classList.contains("favorites")) {
-            idel = Number(e.target.getAttribute("id"));
-            if (e.target.classList.contains("active")) {
-                e.target.classList.remove("active");
-                if (checkLocalStorageFavoriteItems(idel)) {
-                    const favPlacesAfterDel = getLocalStorage("favoriteItems").filter((x) => x.id !== idel);
-                    localStorage.removeItem("favoriteItems");
-                    localStorage.setItem("favoriteItems", JSON.stringify(favPlacesAfterDel));
-                }
-            }
-            else {
-                e.target.classList.add("active");
-                const elemF = place.find((x) => x.id === idel);
-                const elemFavorites = {
-                    id: elemF.id,
-                    name: elemF.name,
-                    image: elemF.image,
-                };
-                if (!checkLocalStorageFavoriteItems(idel)) {
-                    const favPlaces = getLocalStorage("favoriteItems");
-                    favPlaces.push(elemFavorites);
-                    localStorage.setItem("favoriteItems", JSON.stringify(favPlaces));
-                }
-                else {
-                    localStorage.setItem("favoriteItems", JSON.stringify([elemFavorites]));
-                }
-            }
-        }
-    });
 }

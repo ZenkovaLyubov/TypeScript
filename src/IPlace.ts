@@ -1,9 +1,9 @@
 export interface IPlace {
-  id: number;
+  id: string;
   image: string;
   name: string;
   description: string;
-  remoteness: number;
+  remoteness?: number;
   bookedDates: number[];
   price: number;
 }

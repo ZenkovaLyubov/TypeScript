@@ -1,6 +1,7 @@
 {
   "name": "project-template",
   "version": "1.0.0",
+  "type": "module",
   "main": "index.js",
   "private": true,
   "dependencies": {
@@ -8,6 +9,7 @@
   },
   "scripts": {
     "start": "http-server -p 3000",
+    "start:cli": "node public/scripts",
     "build": "rm -rf public/scripts && tsc",
     "build:dev": "rm -rf public/scripts && tsc -p tsconfig-dev.json",
     "test": "react-scripts test",
