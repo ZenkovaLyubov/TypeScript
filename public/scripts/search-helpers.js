@@ -18,7 +18,7 @@ function searchApi(formData) {
     return __awaiter(this, void 0, void 0, function* () {
         const dateIn = new Date(formData["checkin"]).getTime();
         const dateOut = new Date(formData["checkout"]).getTime();
-        let iplace = [];
+        const iplace = [];
         if (formData["provider"].find((i) => i === "homy")) {
             const url = `${host}/places?checkInDate=${dateIn}&coordinates=59.9386,30.3141&checkOutDate=${dateOut}&maxPrice=${formData["price"]}`;
             const response = yield fetch(url);
@@ -44,9 +44,6 @@ function searchApi(formData) {
                 priceLimit: Number(formData["price"]),
             };
             const searchFrs = yield frs.search(parameters);
-            searchFrs.forEach((el) => {
-                console.log(el["price"]);
-            });
             if (searchFrs) {
                 searchFrs.forEach((el) => {
                     iplace.push({
@@ -56,6 +53,7 @@ function searchApi(formData) {
                         description: el["details"],
                         bookedDates: el["bookedDates"],
                         price: el["totalPrice"],
+                        remoteness: 5,
                     });
                 });
             }

@@ -1,6 +1,7 @@
 import { renderBlock } from "./lib.js";
 import { ISearchFormData } from "./ISearchFormData.js";
 import { funcSearch, namesFields } from "./search-helpers.js";
+import { funcSearchProviders } from "./search-providers.js";
 
 export function renderSearchFormBlock(checkInDate?: Date, checkOutDate?: Date) {
   const todayDate = new Date().toISOString().slice(0, 10);
@@ -43,7 +44,8 @@ export function renderSearchFormBlock(checkInDate?: Date, checkOutDate?: Date) {
         dataRows[el] = dataForm.get(el);
       });
       dataRows["provider"] = providers;
-      funcSearch(dataRows);
+      // funcSearch(dataRows);
+      funcSearchProviders(dataRows);
     }
   }
 

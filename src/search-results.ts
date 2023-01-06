@@ -35,9 +35,9 @@ export function renderSearchResultsBlock(place: IPlace[]) {
         <div class="search-results-filter">
             <span><i class="icon icon-filter"></i> Сортировать:</span>
             <select>
-                <option selected="">Сначала дешёвые</option>
-                <option selected="">Сначала дорогие</option>
-                <option>Сначала ближе</option>
+                <option value="cheap" selected="">Сначала дешёвые</option>
+                <option value="expensive" selected="">Сначала дорогие</option>
+                <option value="nextto">Сначала ближе</option>
             </select>
         </div>
     </div>
@@ -46,49 +46,7 @@ export function renderSearchResultsBlock(place: IPlace[]) {
       `</ul>
     `
   );
-
-  for (const key in place) {
-    const element = document.getElementById(place[key]["id"]);
-    if (!element) continue;
-
-    element.addEventListener("click", (e) => {
-      let idel = "";
-      if ((e.target as Element).classList.contains("favorites")) {
-        idel = (e.target as Element).getAttribute("id").toString().trim();
-        if ((e.target as Element).classList.contains("active")) {
-          (e.target as Element).classList.remove("active");
-          if (checkLocalStorageFavoriteItems(idel)) {
-            const favPlacesAfterDel = getLocalStorage("favoriteItems").filter(
-              (x) => x.id !== idel
-            );
-            localStorage.removeItem("favoriteItems");
-            localStorage.setItem(
-              "favoriteItems",
-              JSON.stringify(favPlacesAfterDel)
-            );
-          }
-        } else {
-          (e.target as Element).classList.add("active");
-          const elemF: IPlace = place.find((x) => x.id === idel);
-          const elemFavorites: PlaceList = {
-            id: elemF.id,
-            name: elemF.name,
-            image: elemF.image,
-          };
-          if (!checkLocalStorageFavoriteItems(idel)) {
-            const favPlaces = getLocalStorage("favoriteItems");
-            favPlaces.push(elemFavorites);
-            localStorage.setItem("favoriteItems", JSON.stringify(favPlaces));
-          } else {
-            localStorage.setItem(
-              "favoriteItems",
-              JSON.stringify([elemFavorites])
-            );
-          }
-        }
-      }
-    });
-  }
+  setFavorites(place);
 }
 
 export function getLocalStorage(key: string): PlaceList[] {
@@ -151,5 +109,52 @@ function renderPlace(place: IPlace[]): string {
       </li>     
     `;
   }
+
   return str;
+}
+
+function setFavorites(place: IPlace[]): void {
+  for (const key in place) {
+    const element = document.getElementById(place[key]["id"]);
+    if (!element) continue;
+
+    element.addEventListener("click", (e) => {
+      let idel = "";
+      if ((e.target as Element).classList.contains("favorites")) {
+        idel = (e.target as Element).getAttribute("id").toString().trim();
+        if ((e.target as Element).classList.contains("active")) {
+          (e.target as Element).classList.remove("active");
+          if (checkLocalStorageFavoriteItems(idel)) {
+            const favPlacesAfterDel = getLocalStorage("favoriteItems").filter(
+              (x) => x.id !== idel
+            );
+            localStorage.removeItem("favoriteItems");
+            localStorage.setItem(
+              "favoriteItems",
+              JSON.stringify(favPlacesAfterDel)
+            );
+          }
+        } else {
+          (e.target as Element).classList.add("active");
+          const elemF: IPlace = place.find((x) => x.id === idel);
+
+          const elemFavorites: PlaceList = {
+            id: elemF.id,
+            name: elemF.name,
+            image: elemF.image,
+          };
+          if (!checkLocalStorageFavoriteItems(idel)) {
+            const favPlaces = getLocalStorage("favoriteItems");
+            favPlaces.push(elemFavorites);
+            localStorage.setItem("favoriteItems", JSON.stringify(favPlaces));
+          } else {
+            localStorage.setItem(
+              "favoriteItems",
+              JSON.stringify([elemFavorites])
+            );
+          }
+        }
+      }
+    });
+  }
 }

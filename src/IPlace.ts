@@ -3,9 +3,9 @@ export interface IPlace {
   image: string;
   name: string;
   description: string;
-  remoteness?: number;
   bookedDates: number[];
   price: number;
+  remoteness?: number;
 }
 
 export type PlaceList = Pick<IPlace, "id" | "name" | "image">;

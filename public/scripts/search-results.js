@@ -22,9 +22,9 @@ export function renderSearchResultsBlock(place) {
         <div class="search-results-filter">
             <span><i class="icon icon-filter"></i> Сортировать:</span>
             <select>
-                <option selected="">Сначала дешёвые</option>
-                <option selected="">Сначала дорогие</option>
-                <option>Сначала ближе</option>
+                <option value="cheap" selected="">Сначала дешёвые</option>
+                <option value="expensive" selected="">Сначала дорогие</option>
+                <option value="nextto">Сначала ближе</option>
             </select>
         </div>
     </div>
@@ -32,42 +32,7 @@ export function renderSearchResultsBlock(place) {
         renderPlace(place) +
         `</ul>
     `);
-    for (const key in place) {
-        const element = document.getElementById(place[key]["id"]);
-        if (!element)
-            continue;
-        element.addEventListener("click", (e) => {
-            let idel = "";
-            if (e.target.classList.contains("favorites")) {
-                idel = e.target.getAttribute("id").toString().trim();
-                if (e.target.classList.contains("active")) {
-                    e.target.classList.remove("active");
-                    if (checkLocalStorageFavoriteItems(idel)) {
-                        const favPlacesAfterDel = getLocalStorage("favoriteItems").filter((x) => x.id !== idel);
-                        localStorage.removeItem("favoriteItems");
-                        localStorage.setItem("favoriteItems", JSON.stringify(favPlacesAfterDel));
-                    }
-                }
-                else {
-                    e.target.classList.add("active");
-                    const elemF = place.find((x) => x.id === idel);
-                    const elemFavorites = {
-                        id: elemF.id,
-                        name: elemF.name,
-                        image: elemF.image,
-                    };
-                    if (!checkLocalStorageFavoriteItems(idel)) {
-                        const favPlaces = getLocalStorage("favoriteItems");
-                        favPlaces.push(elemFavorites);
-                        localStorage.setItem("favoriteItems", JSON.stringify(favPlaces));
-                    }
-                    else {
-                        localStorage.setItem("favoriteItems", JSON.stringify([elemFavorites]));
-                    }
-                }
-            }
-        });
-    }
+    setFavorites(place);
 }
 export function getLocalStorage(key) {
     let favPlaces = [];
@@ -126,4 +91,42 @@ function renderPlace(place) {
     `;
     }
     return str;
+}
+function setFavorites(place) {
+    for (const key in place) {
+        const element = document.getElementById(place[key]["id"]);
+        if (!element)
+            continue;
+        element.addEventListener("click", (e) => {
+            let idel = "";
+            if (e.target.classList.contains("favorites")) {
+                idel = e.target.getAttribute("id").toString().trim();
+                if (e.target.classList.contains("active")) {
+                    e.target.classList.remove("active");
+                    if (checkLocalStorageFavoriteItems(idel)) {
+                        const favPlacesAfterDel = getLocalStorage("favoriteItems").filter((x) => x.id !== idel);
+                        localStorage.removeItem("favoriteItems");
+                        localStorage.setItem("favoriteItems", JSON.stringify(favPlacesAfterDel));
+                    }
+                }
+                else {
+                    e.target.classList.add("active");
+                    const elemF = place.find((x) => x.id === idel);
+                    const elemFavorites = {
+                        id: elemF.id,
+                        name: elemF.name,
+                        image: elemF.image,
+                    };
+                    if (!checkLocalStorageFavoriteItems(idel)) {
+                        const favPlaces = getLocalStorage("favoriteItems");
+                        favPlaces.push(elemFavorites);
+                        localStorage.setItem("favoriteItems", JSON.stringify(favPlaces));
+                    }
+                    else {
+                        localStorage.setItem("favoriteItems", JSON.stringify([elemFavorites]));
+                    }
+                }
+            }
+        });
+    }
 }

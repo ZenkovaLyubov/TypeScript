@@ -1,7 +1,6 @@
 import { ISearchFormData } from "./ISearchFormData.js";
 import { renderSearchResultsBlock } from "./search-results.js";
 import { IPlace } from "./IPlace.js";
-
 import { FlatRentSdk } from "./flat-rent-sdk.js";
 
 export type namesFields = "checkin" | "checkout" | "price";
@@ -16,7 +15,7 @@ async function searchApi(formData: ISearchFormData) {
   const dateIn = new Date(formData["checkin"]).getTime();
   const dateOut = new Date(formData["checkout"]).getTime();
 
-  let iplace: IPlace[] = [];
+  const iplace: IPlace[] = [];
   if (formData["provider"].find((i) => i === "homy")) {
     const url = `${host}/places?checkInDate=${dateIn}&coordinates=59.9386,30.3141&checkOutDate=${dateOut}&maxPrice=${formData["price"]}`;
 
@@ -44,9 +43,6 @@ async function searchApi(formData: ISearchFormData) {
     };
 
     const searchFrs = await frs.search(parameters);
-    searchFrs.forEach((el) => {
-      console.log(el["price"]);
-    });
 
     if (searchFrs) {
       searchFrs.forEach((el) => {
@@ -57,6 +53,7 @@ async function searchApi(formData: ISearchFormData) {
           description: el["details"],
           bookedDates: el["bookedDates"],
           price: el["totalPrice"],
+          remoteness: 5,
         });
       });
     }
