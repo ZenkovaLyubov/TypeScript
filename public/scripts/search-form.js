@@ -30,7 +30,6 @@ export function renderSearchFormBlock(checkInDate, checkOutDate) {
                 dataRows[el] = dataForm.get(el);
             });
             dataRows["provider"] = providers;
-            // funcSearch(dataRows);
             funcSearchProviders(dataRows);
         }
     }

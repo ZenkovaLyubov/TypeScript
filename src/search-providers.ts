@@ -3,7 +3,6 @@ import { SearchFilter } from "./store/domain/search-filter.js";
 import { FlatRentProvider } from "./store/providers/flatRent/flatRent-provider.js";
 import { HomyProvider } from "./store/providers/homy/homy-provider.js";
 import { ISearchFormData } from "./ISearchFormData.js";
-import { IPlace } from "./IPlace.js";
 import { renderSearchResultsBlock } from "./search-results.js";
 const homy = new HomyProvider();
 const flatRent = new FlatRentProvider();
@@ -38,31 +37,10 @@ export function funcSearchProviders(dataRows: ISearchFormData) {
 
   Promise.all([homy.find(filter), flatRent.find(filter)]).then((results) => {
     const allResults: Place[] = [].concat(results[0], results[1]);
-    let iplace: IPlace[] = [];
-    iplace = fulliplace(allResults);
 
-    renderSearchResultsBlock(iplace);
+    renderSearchResultsBlock(allResults);
 
     allResults.sort(sortByPrice);
     allResults.sort(sortByRemoteness);
   });
-}
-
-function fulliplace(allResults: Place[]): IPlace[] {
-  const iplace: IPlace[] = [];
-  if (allResults) {
-    allResults.forEach((el) => {
-      iplace.push({
-        id: el["id"],
-        image: el["image"],
-        name: el["name"],
-        description: el["description"],
-        bookedDates: el["bookedDates"],
-        price: el["price"],
-        remoteness: el["remoteness"],
-      });
-    });
-  }
-
-  return iplace;
 }

@@ -1,6 +1,7 @@
 import { renderBlock } from "./lib.js"
 import { PlaceList } from "./IPlace.js";
 import { IPlace } from "./IPlace";
+import { Place } from "./store/domain/place.js";
 
 export function renderSearchStubBlock() {
   renderBlock(
@@ -26,7 +27,7 @@ export function renderEmptyOrErrorSearchBlock(reasonMessage) {
   );
 }
 
-export function renderSearchResultsBlock(place: IPlace[]) {
+export function renderSearchResultsBlock(place: Place[]) {
   renderBlock(
     "search-results-block",
     `
@@ -72,7 +73,7 @@ function checkLocalStorageFavoriteItems(idPlace: string): string | null {
   return null;
 }
 
-function renderPlace(place: IPlace[]): string {
+function renderPlace(place: Place[]): string {
   let str = "";
   let classActive = "";
 
@@ -113,7 +114,7 @@ function renderPlace(place: IPlace[]): string {
   return str;
 }
 
-function setFavorites(place: IPlace[]): void {
+function setFavorites(place: Place[]): void {
   for (const key in place) {
     const element = document.getElementById(place[key]["id"]);
     if (!element) continue;

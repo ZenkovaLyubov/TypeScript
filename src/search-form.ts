@@ -44,7 +44,6 @@ export function renderSearchFormBlock(checkInDate?: Date, checkOutDate?: Date) {
         dataRows[el] = dataForm.get(el);
       });
       dataRows["provider"] = providers;
-      // funcSearch(dataRows);
       funcSearchProviders(dataRows);
     }
   }

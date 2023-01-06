@@ -35,27 +35,8 @@ export function funcSearchProviders(dataRows) {
     }
     Promise.all([homy.find(filter), flatRent.find(filter)]).then((results) => {
         const allResults = [].concat(results[0], results[1]);
-        let iplace = [];
-        iplace = fulliplace(allResults);
-        renderSearchResultsBlock(iplace);
+        renderSearchResultsBlock(allResults);
         allResults.sort(sortByPrice);
         allResults.sort(sortByRemoteness);
     });
-}
-function fulliplace(allResults) {
-    const iplace = [];
-    if (allResults) {
-        allResults.forEach((el) => {
-            iplace.push({
-                id: el["id"],
-                image: el["image"],
-                name: el["name"],
-                description: el["description"],
-                bookedDates: el["bookedDates"],
-                price: el["price"],
-                remoteness: el["remoteness"],
-            });
-        });
-    }
-    return iplace;
 }
