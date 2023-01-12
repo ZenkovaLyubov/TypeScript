@@ -36,7 +36,10 @@ export function renderSearchResultsBlock(place) {
 }
 export function getLocalStorage(key) {
     let favPlaces = [];
-    favPlaces = JSON.parse(localStorage.getItem(key));
+    const localStorageItem = localStorage.getItem(key);
+    if (localStorageItem) {
+        favPlaces = JSON.parse(localStorageItem);
+    }
     if (favPlaces) {
         return favPlaces;
     }
@@ -50,7 +53,9 @@ function checkLocalStorageFavoriteItems(idPlace) {
     if (favPlaces) {
         const indexFavPlace = (_a = favPlaces
             .find((x) => x.id === idPlace)) === null || _a === void 0 ? void 0 : _a.id.toString().trim();
-        return indexFavPlace;
+        if (indexFavPlace) {
+            return indexFavPlace;
+        }
     }
     return null;
 }
@@ -98,32 +103,35 @@ function setFavorites(place) {
         if (!element)
             continue;
         element.addEventListener("click", (e) => {
-            let idel = "";
+            var _a;
             if (e.target.classList.contains("favorites")) {
-                idel = e.target.getAttribute("id").toString().trim();
-                if (e.target.classList.contains("active")) {
-                    e.target.classList.remove("active");
-                    if (checkLocalStorageFavoriteItems(idel)) {
-                        const favPlacesAfterDel = getLocalStorage("favoriteItems").filter((x) => x.id !== idel);
-                        localStorage.removeItem("favoriteItems");
-                        localStorage.setItem("favoriteItems", JSON.stringify(favPlacesAfterDel));
-                    }
-                }
-                else {
-                    e.target.classList.add("active");
-                    const elemF = place.find((x) => x.id === idel);
-                    const elemFavorites = {
-                        id: elemF.id,
-                        name: elemF.name,
-                        image: elemF.image,
-                    };
-                    if (!checkLocalStorageFavoriteItems(idel)) {
-                        const favPlaces = getLocalStorage("favoriteItems");
-                        favPlaces.push(elemFavorites);
-                        localStorage.setItem("favoriteItems", JSON.stringify(favPlaces));
+                const idel = (_a = e.target
+                    .getAttribute("id")) === null || _a === void 0 ? void 0 : _a.toString().trim();
+                if (idel) {
+                    if (e.target.classList.contains("active")) {
+                        e.target.classList.remove("active");
+                        if (checkLocalStorageFavoriteItems(idel)) {
+                            const favPlacesAfterDel = getLocalStorage("favoriteItems").filter((x) => x.id !== idel);
+                            localStorage.removeItem("favoriteItems");
+                            localStorage.setItem("favoriteItems", JSON.stringify(favPlacesAfterDel));
+                        }
                     }
                     else {
-                        localStorage.setItem("favoriteItems", JSON.stringify([elemFavorites]));
+                        e.target.classList.add("active");
+                        const elemF = place.find((x) => x.id === idel);
+                        const elemFavorites = {
+                            id: elemF.id,
+                            name: elemF.name,
+                            image: elemF.image,
+                        };
+                        if (!checkLocalStorageFavoriteItems(idel)) {
+                            const favPlaces = getLocalStorage("favoriteItems");
+                            favPlaces.push(elemFavorites);
+                            localStorage.setItem("favoriteItems", JSON.stringify(favPlaces));
+                        }
+                        else {
+                            localStorage.setItem("favoriteItems", JSON.stringify([elemFavorites]));
+                        }
                     }
                 }
             }

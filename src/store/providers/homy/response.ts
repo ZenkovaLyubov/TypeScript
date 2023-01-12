@@ -1,11 +1,11 @@
 import { IPlace } from "../../../IPlace.js";
 
 export interface PlaceListResponse {
-  errorMessage?: string;
   items: IPlace[];
+  errorMessage?: string;
 }
 
 export interface PlaceResponse {
-  errorMessage?: string;
   item: IPlace;
+  errorMessage?: string;
 }

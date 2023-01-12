@@ -15,8 +15,9 @@ export class FlatRentProvider {
         return new Promise((resolve) => {
             const response = frs.search(parameters);
             resolve(response);
-        }).then((result) => {
+        }).then((resultResp) => {
             const iplace = [];
+            const result = resultResp;
             if (result) {
                 result.forEach((el) => {
                     iplace.push({

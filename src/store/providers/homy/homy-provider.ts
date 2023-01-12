@@ -45,10 +45,13 @@ export class HomyProvider implements Provider {
 
   private convertPlaceListResponse(response: PlaceListResponse): Place[] {
     const placesList: Place[] = [];
-    for (const key in response) {
-      placesList.push(this.convertPlaceResponse(response[key]));
+    const listResponse: any = response;
+
+    for (const key in listResponse) {
+      placesList.push(this.convertPlaceResponse(listResponse[key]));
     }
     return placesList;
+
   }
 
   private convertPlaceResponse(item: HomyPlace): Place {

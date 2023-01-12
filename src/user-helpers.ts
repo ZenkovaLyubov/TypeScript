@@ -8,22 +8,27 @@ export function getUserData() {
     '{"userName": "Марина В.", "avatarUrl": "/img/avatar.png"}'
   );
   /////////////////
-  const user: unknown = JSON.parse(window.localStorage.getItem("user"));
-  Object.setPrototypeOf(user, User.prototype);
-  if (user instanceof User) {
-    return user;
-  } else {
-    throw new Error("User not found.");
+  const strUser = window.localStorage.getItem("user");
+  if (strUser) {
+    const user: unknown = JSON.parse(strUser);
+    Object.setPrototypeOf(user, User.prototype);
+    if (user instanceof User) {
+      return user;
+    } else {
+      throw new Error("User not found.");
+    }
   }
 }
 
-export function getFavoritesAmount(): number {
-  const favPlaces = <PlaceList[]>(
-    JSON.parse(localStorage.getItem("favoriteItems"))
-  );
-  if (favPlaces) {
-    return favPlaces.length;
-  } else {
-    return 0;
+export function getFavoritesAmount(): number | null {
+  const strFavPlace = localStorage.getItem("favoriteItems");
+  if (strFavPlace) {
+    const favPlaces = <PlaceList[]>JSON.parse(strFavPlace);
+    if (favPlaces) {
+      return favPlaces.length;
+    } else {
+      return 0;
+    }
   }
+  return null;
 }

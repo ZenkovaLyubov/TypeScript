@@ -1,6 +1,7 @@
 export interface ISearchFormData {
-  checkInDate?: string;
-  checkOutDate?: string;
-  price?: string;
-  provider?: string[];
+  checkInDate?: string | undefined;
+  checkOutDate?: string | undefined;
+  price?: string | undefined;
+  provider?: string[] | undefined;
 }
+// export type namesFields = "checkInDate" | "checkOutDate" | "price" ;

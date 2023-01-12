@@ -24,8 +24,9 @@ export class HomyProvider {
     }
     convertPlaceListResponse(response) {
         const placesList = [];
-        for (const key in response) {
-            placesList.push(this.convertPlaceResponse(response[key]));
+        const listResponse = response;
+        for (const key in listResponse) {
+            placesList.push(this.convertPlaceResponse(listResponse[key]));
         }
         return placesList;
     }

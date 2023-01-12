@@ -7,7 +7,7 @@ export class Place {
     public readonly description: string,
     public readonly bookedDates: number[],
     public readonly price: number,
-    public readonly remoteness?: number
+    public readonly remoteness: number | undefined
   ) {}
 
   get id() {

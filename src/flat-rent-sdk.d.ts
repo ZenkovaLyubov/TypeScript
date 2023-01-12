@@ -1,3 +1,13 @@
+export interface Isdk {
+  id: string;
+  title: string;
+  details: string;
+  photos: string[];
+  coordinates: number[];
+  bookedDates: [];
+  totalPrice: number;
+}
+
 export function cloneDate(date: Date): Date;
 
 export function addDays(date: Date, days: number): Date;
@@ -13,7 +23,7 @@ export class FlatRentSdk {
    * @param {string} id Flat ID.
    * @returns {Promise<Object|null>} Flat.
    */
-  get(id: string): Promise<Object | null>;
+  get(id: string): Promise<Isdk[] | null>;
   /**
    * Search for flats.
    *
@@ -29,7 +39,7 @@ export class FlatRentSdk {
     checkInDate: Date;
     checkOutDate: Date;
     priceLimit?: number;
-  }): Object[];
+  }): Isdk[];
   /**
    * Book flat.
    *

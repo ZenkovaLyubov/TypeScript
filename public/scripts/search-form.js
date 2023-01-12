@@ -25,9 +25,10 @@ export function renderSearchFormBlock(checkInDate, checkOutDate) {
         e.preventDefault();
         if (e.target) {
             const dataForm = new FormData(e.target);
+            const dataFormList = dataForm;
             const dataRows = {};
             namesFieldsForm.forEach((el) => {
-                dataRows[el] = dataForm.get(el);
+                dataRows[el] = dataFormList.get(el);
             });
             dataRows["provider"] = providers;
             funcSearchProviders(dataRows);
@@ -50,11 +51,11 @@ export function renderSearchFormBlock(checkInDate, checkOutDate) {
         <div class="row">
           <div>
             <label for="check-in-date">Дата заезда</label>
-            <input id="check-in-date" type="date" value=${checkInDateStr} min=${todayDate} max=${maxDate} name="checkin" />
+            <input id="check-in-date" type="date" value=${checkInDateStr} min=${todayDate} max=${maxDate} name="checkInDate" />
           </div>
           <div>
             <label for="check-out-date">Дата выезда</label>
-            <input id="check-out-date" type="date" value=${checkOutDateStr} min=${todayDate} max=${maxDate} name="checkout" />
+            <input id="check-out-date" type="date" value=${checkOutDateStr} min=${todayDate} max=${maxDate} name="checkOutDate" />
           </div>
           <div>
             <label for="max-price">Макс. цена суток</label>
@@ -68,13 +69,22 @@ export function renderSearchFormBlock(checkInDate, checkOutDate) {
     </form>
     `);
     const searchForm = document.getElementById("form");
-    const namesFieldsForm = ["checkin", "checkout", "price"];
+    const namesFieldsForm = [
+        "checkInDate",
+        "checkOutDate",
+        "price",
+    ];
     searchForm === null || searchForm === void 0 ? void 0 : searchForm.addEventListener("submit", (e) => {
         const providers = [];
         e.target
-            .querySelectorAll('input[name="provider"]:checked')
+            .querySelectorAll("input[name='provider']:checked")
             .forEach((element) => {
-            providers.push(element.getAttribute("value"));
+            if (element) {
+                const valueStr = element.getAttribute("value");
+                if (valueStr) {
+                    providers.push(valueStr);
+                }
+            }
         });
         handleFormSubmit(e, namesFieldsForm, providers);
     });

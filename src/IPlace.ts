@@ -5,7 +5,7 @@ export interface IPlace {
   description: string;
   bookedDates: number[];
   price: number;
-  remoteness?: number;
+  remoteness?: number | undefined;
 }
 
 export type PlaceList = Pick<IPlace, "id" | "name" | "image">;

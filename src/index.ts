@@ -6,24 +6,27 @@ import { User } from "./classUser.js";
 import { getUserData, getFavoritesAmount } from "./user-helpers.js";
 
 window.addEventListener("DOMContentLoaded", () => {
-  const user: User = getUserData();
-  const favoritesAmount = getFavoritesAmount();
+  const user: User | undefined = getUserData();
+  const favoritesAmount: number | null = getFavoritesAmount();
 
-  renderUserBlock(user.userName, user.avatarUrl, favoritesAmount);
+  if (user) {
+    renderUserBlock(user.userName, user.avatarUrl, favoritesAmount);
 
-  renderSearchFormBlock();
+    renderSearchFormBlock();
 
-  renderSearchStubBlock();
-  renderToast(
-    {
-      text: "Это пример уведомления. Используйте его при необходимости",
-      type: "success",
-    },
-    {
-      name: "Понял",
-      handler: () => {
-        console.log("Уведомление закрыто");
+    renderSearchStubBlock();
+    renderToast(
+      {
+        text: "Это пример уведомления. Используйте его при необходимости",
+        type: "success",
       },
-    }
-  );
+      {
+        name: "Понял",
+        handler: () => {
+          console.log("Уведомление закрыто");
+        },
+      }
+    );
+  }
+  
 });

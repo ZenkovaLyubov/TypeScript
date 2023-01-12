@@ -4,8 +4,9 @@ import { renderSearchResultsBlock } from "./search-results.js";
 const homy = new HomyProvider();
 const flatRent = new FlatRentProvider();
 export function funcSearchProviders(dataRows) {
-    const dateIn = new Date(dataRows["checkin"]).getTime();
-    const dateOut = new Date(dataRows["checkout"]).getTime();
+    var _a;
+    const dateIn = (dataRows["checkInDate"] ? new Date(dataRows["checkInDate"]) : new Date()).getTime();
+    const dateOut = new Date((_a = dataRows["checkOutDate"]) !== null && _a !== void 0 ? _a : "").getTime();
     const filter = {
         checkIn: dateIn,
         checkOut: dateOut,
@@ -23,20 +24,25 @@ export function funcSearchProviders(dataRows) {
         }
     }
     function sortByRemoteness(one, two) {
-        if (one.remoteness > two.remoteness) {
-            return 1;
+        if (one.remoteness && two.remoteness) {
+            if (one.remoteness > two.remoteness) {
+                return 1;
+            }
+            else if (one.remoteness < two.remoteness) {
+                return -1;
+            }
+            else {
+                return 0;
+            }
         }
-        else if (one.remoteness < two.remoteness) {
-            return -1;
-        }
-        else {
-            return 0;
-        }
+        return 0;
     }
     Promise.all([homy.find(filter), flatRent.find(filter)]).then((results) => {
-        const allResults = [].concat(results[0], results[1]);
-        renderSearchResultsBlock(allResults);
-        allResults.sort(sortByPrice);
-        allResults.sort(sortByRemoteness);
+        if (results[0] && results[1]) {
+            const allResults = [].concat(results[0], results[1]);
+            renderSearchResultsBlock(allResults);
+            allResults.sort(sortByPrice);
+            allResults.sort(sortByRemoteness);
+        }
     });
 }

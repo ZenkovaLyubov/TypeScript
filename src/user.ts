@@ -3,7 +3,7 @@ import { renderBlock } from "./lib.js";
 export function renderUserBlock(
   userName: string,
   userAvatar: string,
-  favoriteItemsAmount?: number
+  favoriteItemsAmount?: number | null
 ) {
   const favoritesCaption = favoriteItemsAmount
     ? favoriteItemsAmount
@@ -19,8 +19,8 @@ export function renderUserBlock(
           <p class="name">${userName}</p>
           <p class="fav">
             <i class="heart-icon${
-  hasFavoriteItems ? " active" : ""
-}"></i>${favoritesCaption}
+              hasFavoriteItems ? " active" : ""
+            }"></i>${favoritesCaption}
           </p>
       </div>
     </div>

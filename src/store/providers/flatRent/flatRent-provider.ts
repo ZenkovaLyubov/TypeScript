@@ -3,6 +3,7 @@ import { Provider } from "../../domain/provider.js";
 import { SearchFilter } from "../../domain/search-filter.js";
 import { IPlace as FlatRentPlace, IPlace } from "../../../IPlace";
 import { FlatRentSdk } from "../../../flat-rent-sdk.js";
+import { Isdk } from "../../../flat-rent-sdk";
 
 export class FlatRentProvider implements Provider {
   getById(id: string): Promise<Place> {
@@ -24,9 +25,9 @@ export class FlatRentProvider implements Provider {
     return new Promise((resolve) => {
       const response = frs.search(parameters);
       resolve(response);
-    }).then((result: any) => {
+    }).then((resultResp) => {
       const iplace: FlatRentPlace[] = [];
-
+      const result: Isdk[] = <Isdk[]>resultResp;
       if (result) {
         result.forEach((el) => {
           iplace.push({

@@ -1,6 +1,6 @@
 import { renderBlock } from "./lib.js";
 import { ISearchFormData } from "./ISearchFormData.js";
-import { funcSearch, namesFields } from "./search-helpers.js";
+import { namesFields } from "./search-helpers.js";
 import { funcSearchProviders } from "./search-providers.js";
 
 export function renderSearchFormBlock(checkInDate?: Date, checkOutDate?: Date) {
@@ -38,12 +38,14 @@ export function renderSearchFormBlock(checkInDate?: Date, checkOutDate?: Date) {
     e.preventDefault();
     if (e.target) {
       const dataForm = new FormData(e.target as HTMLFormElement);
+      const dataFormList: any = dataForm;
       const dataRows: ISearchFormData = {};
 
       namesFieldsForm.forEach((el) => {
-        dataRows[el] = dataForm.get(el);
+        dataRows[el] = dataFormList.get(el);
       });
       dataRows["provider"] = providers;
+
       funcSearchProviders(dataRows);
     }
   }
@@ -67,11 +69,11 @@ export function renderSearchFormBlock(checkInDate?: Date, checkOutDate?: Date) {
         <div class="row">
           <div>
             <label for="check-in-date">Дата заезда</label>
-            <input id="check-in-date" type="date" value=${checkInDateStr} min=${todayDate} max=${maxDate} name="checkin" />
+            <input id="check-in-date" type="date" value=${checkInDateStr} min=${todayDate} max=${maxDate} name="checkInDate" />
           </div>
           <div>
             <label for="check-out-date">Дата выезда</label>
-            <input id="check-out-date" type="date" value=${checkOutDateStr} min=${todayDate} max=${maxDate} name="checkout" />
+            <input id="check-out-date" type="date" value=${checkOutDateStr} min=${todayDate} max=${maxDate} name="checkOutDate" />
           </div>
           <div>
             <label for="max-price">Макс. цена суток</label>
@@ -87,13 +89,22 @@ export function renderSearchFormBlock(checkInDate?: Date, checkOutDate?: Date) {
   );
   const searchForm = document.getElementById("form");
 
-  const namesFieldsForm: namesFields[] = ["checkin", "checkout", "price"];
+  const namesFieldsForm: namesFields[] = [
+    "checkInDate",
+    "checkOutDate",
+    "price",
+  ];
   searchForm?.addEventListener("submit", (e) => {
     const providers: string[] = [];
     (e.target as Element)
-      .querySelectorAll('input[name="provider"]:checked')
+      .querySelectorAll("input[name='provider']:checked")
       .forEach((element) => {
-        providers.push(element.getAttribute("value"));
+        if (element) {
+          const valueStr = element.getAttribute("value");
+          if (valueStr) {
+            providers.push(valueStr);
+          }
+        }
       });
 
     handleFormSubmit(e, namesFieldsForm, providers);
